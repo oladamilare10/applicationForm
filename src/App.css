@@ -1,0 +1,235 @@
+.App {
+  text-align: center;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  padding-top: 250px;
+}
+
+.App2 {
+  text-align: center;
+  margin: auto;
+  display: inline-block;
+  justify-content: center;
+  padding-top: 30px;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+.App-spin{
+  max-height: 16px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-spin {
+    animation: App-logo-spin infinite .7s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.write-container{
+  background-color: #fff;
+  width: 80%;
+  min-height: 75px;
+  border: 1px solid #bcbcbd;
+  box-shadow: 0 1px 3px #7c7c7c;
+  border-radius: 4px;
+  padding: 10px;
+  display: inline-block;
+  margin: 10px;
+}
+
+.write-container4{
+  background-color: #fff;
+  width: 80%;
+  min-height: 75px;
+  border: 1px solid #bcbcbd;
+  box-shadow: 0 1px 3px #7c7c7c;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  padding: 10px;
+  display: inline-block;
+  margin: 0px 10px 10px 10px;
+}
+
+
+.text-box{
+  width: 100%;
+  margin-bottom: 15px;
+  font-weight: 400;
+  color: rgb(30, 30, 30);
+}
+.text-box2{
+  width: 100%;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.text-box h2{
+  font-size: 17px;
+  font-weight: 500;
+  margin-bottom: 0px;
+}
+
+.text-box2 h3{
+  font-size: 17px;
+  font-weight: 500;
+  margin-bottom: 7px;
+}
+.progressrty{
+  position: fixed;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: -2px -2px 3px #acacac;
+}
+
+select{
+  border: none;
+}
+.text-box2 input[type=text],input[type=number],input[type=date],input[type=email],input[type=tel],select{
+  width: 300px;
+  padding: 10px 13px;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  color: #5c5c5c;
+  background-color: transparent;
+  font-size: medium;
+  letter-spacing: 0.51px;
+  border-bottom: 1px solid #b8b5b5;
+  transition: 0.2s ;
+}
+
+
+.text-box2 input[type=text]:focus{
+  border-bottom: 2px solid #b8b5b5;
+}
+.btnRtyRty{
+  border: none;
+  outline: none;
+  color: #fff;
+  background-color: #ff7a3d;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.required{
+  color: #fff;
+  background-color: #ff7a3d;
+  border-radius: 2px;
+  margin-top: 10px;
+  font-size: 80%;
+  text-align: center;
+  width: 60px;
+  padding: 2px;
+}
+.btn-proc{
+  padding: 11px 20px;
+  font-weight: 500;
+  font-size: 100%;
+}
+.btnRty:hover{
+  background-color: #ff7a3d;
+}
+.sub-btnRty{
+  padding: 10px 15px;
+  background-color: #ff7a3d;
+  font-size: 20px;
+  font-weight: 500;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+.powered{
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 50px;
+}
+.powered h3{
+  color: rgba(0, 0, 0, 1);
+  font-weight: 500;
+  font-size: 90%;
+}
+@media only screen and (max-screen: 650px) {
+  .App{
+    padding: 10px;
+  }
+  .App2{
+    padding: 10px;
+  }
+  .write-container{
+    width: 90%;
+    display: block;
+  }
+}
+
+.top-flag{
+  background-color: #ff7a3d;
+  width: 80%;
+  box-shadow: 0 1px 3px #7c7c7c;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  padding: 10px 10px;
+  display: inline-block;
+  margin: 10px 10px 0px 10px;
+}
+.top-flag h3{
+  font-weight: 500;
+  font-size: 20px;
+  color: #fff;
+  margin: 0;
+}
+.secure-icon{
+  color: #06a11b;
+  width: 17px;
+  margin: 0;
+  padding: 0;
+}
+
+.text-box2 input[type=file]{
+  position: relative;
+  top: -43px;
+  border-bottom: 1px solid #5c5c5c;
+  padding: 10px;
+}
+.inputFile{
+  opacity: 0;
+}
+.opacityShow{
+  opacity: 1;
+}
+.message{
+  color: rgb(227, 79, 10);
+  font-size: .8rem;
+  line-height: 24px;
+}
