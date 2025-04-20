@@ -19,7 +19,7 @@ function SuccessModal({ show, onClose }) {
       textAlign: 'center'
     },
     icon: {
-      color: '#ff7a3d',
+      color: '#6b46c1',
       fontSize: '4rem',
       marginBottom: '1.5rem'
     },
@@ -97,13 +97,13 @@ function SuccessModal({ show, onClose }) {
             <Modal.Footer style={modalStyle.footer}>
               <Button
                 style={{
-                  backgroundColor: '#ff7a3d',
-                  borderColor: '#ff7a3d',
+                  backgroundColor: '#6b46c1',
+                  borderColor: '#6b46c1',
                   padding: '0.75rem 2rem',
                   fontSize: '0.95rem',
                   fontWeight: '600',
                   letterSpacing: '0.02em',
-                  boxShadow: '0 4px 6px rgba(255, 122, 61, 0.2)',
+                  boxShadow: '0 4px 6px rgba(107, 70, 193, 0.2)',
                   transition: 'all 0.3s ease'
                 }}
                 onClick={onClose}

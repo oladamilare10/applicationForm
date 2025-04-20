@@ -7,8 +7,8 @@ body {
 }
 
 :root {
-  --primary-color: #ff7a3d;
-  --accent-color: #ff7a3d;
+  --primary-color: #6b46c1;
+  --accent-color: #6b46c1;
   --success-color: #2ecc71;
   --warning-color: #f1c40f;
   --danger-color: #e74c3c;
@@ -105,7 +105,7 @@ body {
 
 .form-control:focus, .form-select:focus {
   box-shadow: 
-    0 0 0 3px rgba(255, 122, 61, 0.25),
+    0 0 0 3px rgba(107, 70, 193, 0.25),
     0 4px 12px rgba(0, 0, 0, 0.05) !important;
   border-color: var(--primary-color) !important;
   transform: translateY(-2px);
@@ -155,10 +155,10 @@ body {
 }
 
 .btn-primary:hover {
-  background-color: #ff956b !important;
-  border-color: #ff956b !important;
+  background-color: #805ad5 !important;
+  border-color: #805ad5 !important;
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(255, 122, 61, 0.25);
+  box-shadow: 0 6px 15px rgba(107, 70, 193, 0.25);
 }
 
 .btn:active {
@@ -549,13 +549,13 @@ body {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--primary-color), #ff956b);
+  background: linear-gradient(90deg, var(--primary-color), #805ad5);
 }
 
 /* Form field enhancements */
 .form-control:focus, .form-select:focus {
   box-shadow: 
-    0 0 0 3px rgba(255, 122, 61, 0.25),
+    0 0 0 3px rgba(107, 70, 193, 0.25),
     0 4px 12px rgba(0, 0, 0, 0.05) !important;
   border-color: var(--primary-color) !important;
   transform: translateY(-2px);
@@ -593,7 +593,7 @@ body {
   width: 100%;
   padding: 2rem;
   background: var(--background-light);
-  border: 2px dashed rgba(255, 122, 61, 0.3);
+  border: 2px dashed rgba(107, 70, 193, 0.3);
   border-radius: 12px;
   text-align: center;
   transition: all 0.3s ease;
@@ -718,7 +718,7 @@ body {
 /* File Upload Enhancements */
 .custom-file-upload {
   background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8));
-  border: 2px dashed rgba(255, 122, 61, 0.3);
+  border: 2px dashed rgba(107, 70, 193, 0.3);
   padding: 2rem;
   text-align: center;
   cursor: pointer;
@@ -730,7 +730,7 @@ body {
 .custom-file-upload:hover {
   border-color: var(--primary-color);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 122, 61, 0.1);
+  box-shadow: 0 4px 12px rgba(107, 70, 193, 0.1);
 }
 
 .custom-file-upload.disabled {
@@ -887,4 +887,100 @@ body {
 .btn:focus {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
+}
+
+/* Header Navigation Styles */
+.navbar-glass {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar-brand-container {
+  display: flex;
+  align-items: center;
+}
+
+.custom-toggler {
+  border: none !important;
+  padding: 0.5rem !important;
+  transition: transform 0.3s ease !important;
+}
+
+.custom-toggler:hover {
+  transform: scale(1.1);
+}
+
+.custom-toggler:focus {
+  box-shadow: none !important;
+}
+
+.navbar-toggler-icon {
+  width: 24px !important;
+  height: 24px !important;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 0.9)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E") !important;
+}
+
+.nav-link-container {
+  position: relative;
+  margin: 0 0.25rem;
+}
+
+.nav-link-hover {
+  position: relative;
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+  padding: 0.75rem 1.25rem !important;
+}
+
+.nav-link-hover:hover {
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+.link-underline {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 1.25rem;
+  right: 1.25rem;
+  height: 2px;
+  background: #ffffff;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+  transform-origin: left;
+}
+
+.nav-link-hover:hover .link-underline {
+  transform: scaleX(1);
+}
+
+@media (max-width: 991px) {
+  .navbar-collapse {
+    background: linear-gradient(135deg, #6b46c1 0%, #805ad5 100%);
+    margin: 1rem -1.5rem -1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .nav-link-container {
+    width: 100%;
+    margin: 0.25rem 0;
+  }
+
+  .nav-link-hover {
+    padding: 0.75rem 1.5rem !important;
+    border-radius: 0.5rem;
+    width: 100%;
+  }
+
+  .nav-link-hover:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: none;
+  }
+
+  .link-underline {
+    display: none;
+  }
 }

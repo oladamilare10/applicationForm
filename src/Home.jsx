@@ -59,7 +59,7 @@ const Home = () => {
                 transition={{ delay: 0.5, duration: 0.5 }}
               >
                 <Button 
-                  style={{backgroundColor: "#ff7a3d", borderColor:"#ff7a3d"}} 
+                  style={{backgroundColor: "#6b46c1", borderColor:"#6b46c1"}} 
                   onClick={loadNewForm}
                   size="lg"
                   className="px-5"

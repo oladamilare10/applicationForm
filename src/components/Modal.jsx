@@ -11,7 +11,7 @@ function ModalPage({ show, handleClose, country, state, zip, city }) {
       padding: '0'
     },
     header: {
-      background: 'linear-gradient(135deg, #ff7a3d, #ff956b)',
+      background: 'linear-gradient(135deg, #6b46c1, #805ad5)',
       color: 'white',
       borderBottom: 'none',
       padding: '1.5rem',
@@ -37,9 +37,9 @@ function ModalPage({ show, handleClose, country, state, zip, city }) {
     infoItem: {
       marginBottom: '1rem',
       padding: '0.75rem',
-      background: 'rgba(255, 122, 61, 0.05)',
+      background: 'rgba(107, 70, 193, 0.05)',
       borderRadius: '8px',
-      border: '1px solid rgba(255, 122, 61, 0.1)'
+      border: '1px solid rgba(107, 70, 193, 0.1)'
     },
     label: {
       color: '#7f8c8d',
@@ -54,10 +54,10 @@ function ModalPage({ show, handleClose, country, state, zip, city }) {
     note: {
       marginTop: '1.5rem',
       padding: '1rem',
-      background: 'rgba(255, 122, 61, 0.05)',
-      border: '1px solid rgba(255, 122, 61, 0.2)',
+      background: 'rgba(107, 70, 193, 0.05)',
+      border: '1px solid rgba(107, 70, 193, 0.2)',
       borderRadius: '8px',
-      color: '#ff7a3d',
+      color: '#6b46c1',
       fontSize: '0.9rem',
       fontWeight: '500'
     }
@@ -129,13 +129,13 @@ function ModalPage({ show, handleClose, country, state, zip, city }) {
             <Modal.Footer style={modalStyle.footer}>
               <Button 
                 style={{
-                  backgroundColor: '#ff7a3d',
-                  borderColor: '#ff7a3d',
+                  backgroundColor: '#6b46c1',
+                  borderColor: '#6b46c1',
                   padding: '0.75rem 2rem',
                   fontSize: '0.95rem',
                   fontWeight: '600',
                   letterSpacing: '0.02em',
-                  boxShadow: '0 4px 6px rgba(255, 122, 61, 0.2)',
+                  boxShadow: '0 4px 6px rgba(107, 70, 193, 0.2)',
                   transition: 'all 0.3s ease'
                 }}
                 onClick={handleClose}
