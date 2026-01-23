@@ -20,7 +20,7 @@ const AiChat = () => {
 
   useEffect(() => {
     // Initialize Gemini API
-    const apiKey = process.env.REACT_APP_GEMINI_API_KEY || 'AIzaSyAZeFlCmRXi8diy2Xu5qTCiG2ES6Lt2A_E' // Placeholder
+    const apiKey = process.env.REACT_APP_GEMINI_API
     genAI.current = new GoogleGenerativeAI(apiKey)
   }, [])
 
