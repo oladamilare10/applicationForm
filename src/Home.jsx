@@ -38,7 +38,7 @@ const Home = () => {
   
   return (
     <div className="form-wrapper" style={{
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      background: '#ffffff',
       minHeight: '100vh',
       display: 'flex',
       alignItems: 'center',
@@ -50,11 +50,10 @@ const Home = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <Card className="shadow-lg" style={{
-            border: 'none',
-            borderRadius: '24px',
-            background: 'rgba(255, 255, 255, 0.95)',
-            backdropFilter: 'blur(20px)'
+          <Card className="shadow-sm" style={{
+            border: '1px solid #e8e8e8',
+            borderRadius: '16px',
+            background: '#ffffff'
           }}>
             <Card.Body className="p-5">
               <motion.div
@@ -68,11 +67,10 @@ const Home = () => {
                   width={200}
                   alt="Logo"
                   className="mb-4"
-                  initial={{ scale: 0.8, opacity: 0, rotate: -10 }}
-                  animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.3, duration: 0.6 }}
                   style={{
-                    filter: 'drop-shadow(0 4px 15px rgba(102, 126, 234, 0.3))',
                     maxWidth: '100%',
                     height: 'auto'
                   }}
@@ -87,7 +85,7 @@ const Home = () => {
                 style={{
                   fontSize: '2.5rem',
                   fontWeight: '700',
-                  color: '#2c3e50',
+                  color: '#1a1a1a',
                   letterSpacing: '-0.01em'
                 }}
               >
@@ -101,7 +99,7 @@ const Home = () => {
                 transition={{ delay: 0.4, duration: 0.5 }}
                 style={{
                   fontSize: '1.1rem',
-                  color: '#555',
+                  color: '#666',
                   lineHeight: '1.8',
                   marginBottom: '2rem'
                 }}
@@ -120,29 +118,29 @@ const Home = () => {
                       transition={{ delay: 0.5 + index * 0.1, duration: 0.5 }}
                       style={{
                         padding: '1.5rem',
-                        background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
-                        borderRadius: '16px',
-                        border: '1px solid rgba(102, 126, 234, 0.2)',
+                        background: '#f9f9f9',
+                        borderRadius: '12px',
+                        border: '1px solid #e8e8e8',
                         transition: 'all 0.3s ease',
                         cursor: 'pointer'
                       }}
                       whileHover={{
                         transform: 'translateY(-4px)',
-                        boxShadow: '0 12px 24px rgba(102, 126, 234, 0.15)'
+                        boxShadow: '0 8px 16px rgba(0, 0, 0, 0.08)'
                       }}
                     >
                       <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>
                         {feature.icon}
                       </div>
                       <h5 style={{
-                        color: '#2c3e50',
+                        color: '#1a1a1a',
                         fontWeight: '600',
                         marginBottom: '0.5rem'
                       }}>
                         {feature.title}
                       </h5>
                       <p style={{
-                        color: '#7f8c8d',
+                        color: '#999',
                         fontSize: '0.95rem',
                         margin: 0
                       }}>
@@ -165,13 +163,13 @@ const Home = () => {
                 >
                   <Button 
                     style={{
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      background: '#667eea',
                       borderColor: 'transparent',
                       padding: '14px 50px',
                       fontSize: '1.1rem',
                       fontWeight: '600',
-                      borderRadius: '12px',
-                      boxShadow: '0 8px 25px rgba(102, 126, 234, 0.4)',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
                       transition: 'all 0.3s ease'
                     }}
                     onClick={loadNewForm}
@@ -191,7 +189,7 @@ const Home = () => {
                 transition={{ delay: 1.2, duration: 0.5 }}
                 style={{
                   fontSize: '0.9rem',
-                  color: '#7f8c8d'
+                  color: '#999'
                 }}
               >
                 <span>🔒 Your information is secure and will only be used for application purposes</span>
