@@ -3,12 +3,10 @@ import { BsFillShieldLockFill, BsCloudUpload } from 'react-icons/bs'
 import { ImSpinner2 } from 'react-icons/im'
 import axios from 'axios'
 import { motion, AnimatePresence } from 'framer-motion'
-import ProgressBar from './components/progress_bar'
 import ModalPage from './components/Modal'
 import Button from 'react-bootstrap/Button'
 import Header from './components/Header'
 // import Footer from './components/Footer'
-import AbsoluteBack from './components/AbsoluteBack'
 import { Container, Card } from 'react-bootstrap'
 import SuccessModal from './components/SuccessModal'
 
@@ -28,9 +26,6 @@ const Forms = () => {
   const [q2, setQ2] = useState('')
   const [q3, setQ3] = useState('')
   const [currentSlide, setCurrentSlide] = useState(0)
-  const [image, setImage] = useState('')
-  const [imageTwo, setImageTwo] = useState('')
-  const [imageThree, setImageThree] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [mssge, setMssge] = useState(false)
   const [show, setShow] = useState(false)
@@ -758,12 +753,12 @@ ${skipResume ? '(Applicant opted to skip resume)' : ''}
     transition: "all 0.3s ease"
   };
 
-  const buttonHoverStyle = {
-    backgroundColor: "#2980b9",
-    borderColor: "#2980b9",
-    transform: "translateY(-2px)",
-    boxShadow: "0 6px 15px rgba(52, 152, 219, 0.25)"
-  };
+  // const buttonHoverStyle = {
+  //   backgroundColor: "#2980b9",
+  //   borderColor: "#2980b9",
+  //   transform: "translateY(-2px)",
+  //   boxShadow: "0 6px 15px rgba(52, 152, 219, 0.25)"
+  // };
 
   return (
     <div className="form-wrapper">
